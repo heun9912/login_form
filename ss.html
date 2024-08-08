@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입 폼</title>
+    <style>
+      .error {
+        color: red;
+      }
+      .tooltip {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        border: 1px solid #c1c1c1;
+        padding: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h2>회원가입</h2>
+    <form id="signupForm">
+      <label for="username">사용자 이름:</label><br />
+      <input type="text" id="username" name="username" /><br />
+      <label for="email">이메일:</label><br />
+      <input type="email" id="email" name="email" /><br />
+      <label for="password">비밀번호:</label><br />
+      <input type="password" id="password" name="password" /><br />
+      <label for="confirmPassword">비밀번호 확인:</label><br />
+      <input
+        type="password"
+        id="confirmPassword"
+        name="confirmPassword"
+      /><br />
+      <label for="gender">성별:</label><br />
+      <input type="radio" id="male" name="gender" value="남성" />
+      <label for="male">남성</label><br />
+      <input type="radio" id="female" name="gender" value="여성" />
+      <label for="female">여성</label><br />
+      <input type="radio" id="other" name="gender" value="기타" />
+      <label for="other">기타</label><br />
+      <input type="checkbox" id="terms" name="terms" />
+      <label for="terms">약관에 동의합니다</label>
+      <div id="termsTooltip" class="tooltip">
+        약관 내용: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </div>
+      <br />
+      <button type="submit">회원가입</button>
+    </form>
+    <div id="error" class="error"></div>
+    <div id="confirmation" style="display: none">
+      <h3>정보 확인</h3>
+      <p id="confirmUsername"></p>
+      <p id="confirmEmail"></p>
+      <p id="confirmGender"></p>
+    </div>
+    <script>
+      $(document).ready(function () {
+        $("#terms").hover(
+          function () {
+            $("#termsTooltip").show();
+          },
+          function () {
+            $("#termsTooltip").hide();
+          }
+        );
+
+        $("#signupForm").submit(function (event) {
+          event.preventDefault();
+          let error = "";
+          const username = $("#username").val();
+          const email = $("#email").val();
+          const password = $("#password").val();
+          const confirmPassword = $("#confirmPassword").val();
+          const gender = $('input[name="gender"]:checked').val();
+          const terms = $("#terms").is(":checked");
+
+          if (!username || !email || !password || !confirmPassword) {
+            error = "모든 필드를 입력해주세요.";
+          } else if (password !== confirmPassword) {
+            error = "비밀번호가 일치하지 않습니다.";
+          } else if (!gender) {
+            error = "성별을 선택해주세요.";
+          } else if (!terms) {
+            alert("약관에 동의해주세요.");
+            error = "약관에 동의해주세요.";
+          }
+
+          if (error) {
+            $("#error").text(error);
+          } else {
+            $("#error").text("");
+            $("#confirmation").show();
+            $("#confirmUsername").text(`사용자 이름: ${username}`);
+            $("#confirmEmail").text(`이메일: ${email}`);
+            $("#confirmGender").text(`성별: ${gender}`);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
